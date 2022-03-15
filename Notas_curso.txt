@@ -1,0 +1,120 @@
+HIGHLITHS    
+    * Use this to create a new project with --no-strict mode from CLI 
+        -> ng new ng4-complete-guide --no-strict
+    * To include boostrap in the whole project we nee to add Bootstrap to the styles[] array in angular-cli.json or angular.json file, 
+    but the path should be "node_modules/bootstrap/dist/css/bootstrap.min.css" NOT "../node_modules/bootstrap/dist/css/bootstrap.min.css"
+    * Generate components automatically with "ng generate component [component_name]"
+        Add "--skipTests true" for ignore test file creation -> ng g c [component_name] --skipTests true
+        We can creat a sub-component, inside a folder which is inside app folder -> "ng g c recipes/recipe-list", "ng g c recipes/recipe-list/recipe-item"
+
+SECTION 2: The basic
+* Angular looks for the selector, defined in modules.ts, anywhere inside project and replace with templates' code
+* AppComponent is the root component for this project
+* AppModule.ts -> Angular use modules to bundle pieces or components of the app into packages
+                  It must have @NgModule decorator witch contains boostrap propeties which indicates to angular which components should it aware of at the time of whole applications start
+
+Angular will not scan all of files, so in order to angular knows about new components we need to set it up on @NgModule/declarations of AppModule
+    1. Import ./server/server.component without .ts extension 
+    2. Add new component to declarations sections of @NgModule
+    3. Add the html tag to app.component.html, the same tag that we wrote on @Component/selector from server.component.ts
+        Ex: <app-server></app-server>
+
+* Generate components automatically
+    -> ng generate component <servers>
+    -> ng g c <servers>
+    This will create new component and update app.modules.ts
+
+22. Working with Component Templates. We have 2 ways of define templates in Component
+    1. templateUrl: './servers.component.html',
+    2. template: '<app-server></app-server><app-server></app-server>'
+
+23. Working with Component Styles. We have 2 ways of define styles in @Component
+    1. styleUrls: ['./app.component.css']
+    2. styles:[`
+            h3{
+            color: dodgerblue;
+            }
+        `]
+    
+    RULES: If we have lots of code we use external file (styleUrls) otherwise use inline styles
+
+24. Fully Understanding the Component Selector
+    Selectors must be unique, we cannot override in many places by accident.
+    Selectors can be a html tag or an atribute
+    1. selector: 'app-servers' -> <app-servers></app-servers>
+    2. selector: '[app-servers]' -> <div app-servers></div>
+    3. selector: '.app-servers' -> <div class="app-servers"></div>
+    ASIDE NOTE: Selector by id IS NOT supported by angular
+    Why? Angular looks for the selector, defined in modules.ts, anywhere inside project and replace with templates' code
+
+    26. What is Databinding?
+    Databinding = Communication 
+    * Output Data. Between Typescript Code (business Logic) to Template (HTML), what users see
+        We can use->
+            1. String interpolation -> {{data}}
+                String interpolation has to resolve a value to a string
+                @Component({})
+                export class ServerComponent{
+                    serverId = 10;
+                    getServerStatus(){
+                        return this.serverStatus;
+                    }
+                }
+
+            2. Property binding -> [property]="data"
+                <button class="btn btn-primary" [disabled]="allowNewServer">Add server</button>
+                <button class="btn btn-primary" [disabled]=!allowNewServer>Add server</button>
+                <i [innerText]="allowNewServer"></i>
+    * Event Binding. Between Template to Typescript code. For instance, when user clic on something we want to execute code on Typescript
+        1. Event binding -> (event)="expression"
+            * For events, you don't bind to onclick but only to click
+            <button (click)="onServerCreation()">Add server</button>
+        32. Passing and Using Data with Event Binding
+            with $event we can pass and get data about the event 
+            <input type="text" (input)="onUpdateServerName($event)"/>
+
+    * Two-Way-Binding. Combination of both, Output Data and Event Binding. With this we are able to react events and output something at the same time
+        1. [(ngModel)]="data". With this approach we dont need to use event bin & string interpolation in order to update a element at the moment when an event occurs.
+            In the next example, using ngModel we can write in the input and at the same time the element <p> is getting updated with the new content.
+            <input type="text" [(ngModel)]="serverName" />
+            <p>{{serverName}}</p>
+    
+37. Understanding Directives
+    Directives are Instructions in the DOM!
+    Components are directives with a template, but there are directives with out templates.
+    "Structural directives" (ngIf) add or remove elements and "attribute directives" dont, the only change the element they were placed on.
+    Commonly, directives are added using attribute selector.
+    In the example, we use ngIf directives, all directives need "*" before its name. NgIf indicates whether an element will be showed or not
+    <p *ngIf="serverCreated">Server was created, server name is {{serverName}}</p>
+    
+    39. Enhancing ngIf with an Else Condition
+    We can use <ng-template></ng-template> to mark places in the DOM.
+    For instance, using Local reference (#noServer in this case):
+    <p *ngIf="serverCreated; else noServer">Server was created, server name is {{serverName}}</p>
+    <ng-template #noServer>
+        <p>No server was created</p>
+    </ng-template>
+
+40. Styling Elements Dynamically with ngStyle
+We this we are binding to a property of the directive.
+<p [ngStyle]="{backgroundColor: getColor()}">{{'Server'}} with ID {{serverId}} is {{getServerStatus()}}</p>
+
+41. Applying CSS Classes Dynamically with ngClass
+    ngClass, with property binding, allows us to dinamically add or remove css Classes
+    ngClass add css class if a condition is true, so ngClass take two part: [ngClass]="{<className>:<condition>}"
+    <p [ngClass]="{online:serverStatus=='online'}"> </p>
+
+42. Outputting Lists with ngFor
+    In the next example, <app-server> will repeat as many as servers are
+    Note how "let i = index" let you get the index of the iteration
+    <app-server *ngFor="let server of servers; let i = index"></app-server>
+
+
+
+
+
+
+SECTION 3: Course Project - The Basics
+No every component shoul have a folder in the root level (/app), we can nest it by feature
+    53. Creating a "Recipe" Model
+    A model is Angular is a simple .ts file which contains property, this will be act like a blue print for objects we will create. It's a Class.
