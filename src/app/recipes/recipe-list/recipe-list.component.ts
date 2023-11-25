@@ -1,24 +1,28 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { DataStorageService } from 'src/app/shared/data-storage.service';
 import { Recipe } from '../recipe.model';
+import { RecipeService } from '../recipe.service';
 
 @Component({
   selector: 'app-recipe-list',
   templateUrl: './recipe-list.component.html',
   styleUrls: ['./recipe-list.component.css']
 })
-export class RecipeListComponent implements OnInit {
-  recipes : Recipe[] = [
-    new Recipe('Roast chicken','Chicken with chile-basil',
-    'https://static.onecms.io/wp-content/uploads/sites/9/2021/02/12/roast-chicken-with-chile-basil-vinaigrette-charred-broccoli-potatoes-FT-RECIPE0321.jpg')
-    ,
-    new Recipe('Roast chicken','Chicken with chile-basil',
-    'https://static.onecms.io/wp-content/uploads/sites/9/2021/02/12/roast-chicken-with-chile-basil-vinaigrette-charred-broccoli-potatoes-FT-RECIPE0321.jpg')
-  ];
-  constructor() { 
-    console.log('Lenght: '+this.recipes.length);
+export class RecipeListComponent implements OnInit , OnDestroy{
+  recipes : Recipe[];
+  subscription: Subscription;
+  constructor(private recipeService: RecipeService, private dataStorageService: DataStorageService) { 
+  }
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   ngOnInit(): void {
+    this.recipes = this.recipeService.getRecipes();
+    this.subscription = this.recipeService.recipesChanged.subscribe((data: Recipe[])=>{
+      this.recipes = data;
+    });
   }
-
+  
 }

@@ -1,32 +1,38 @@
 <div class="row">
     <div class="col-xs-12">
-        <img src="" alt="" class="img-responsive"/>
+        <img src="{{recipeSelected.imagePath}}" [alt]="recipeSelected.name"
+        class="img-responsive"
+        style="max-height: 200px;"/>
     </div>
 </div>
 <div class="row">
     <div class="col-xs-12">
-        <h1>Recipe name</h1>
+        <h1>{{recipeSelected.name}}</h1>
     </div>
 </div>
 <div class="row">
     <div class="col-xs-12">
-        <div class="btn-group">
-            <button class="btn btn-primary dropdown-toggle">Manage recipe</button>
-            <ul class="dropdown-menu">
-                <li class="nav-item"><a href="#" class="nav-link">To Shopping List</a></li>
-                <li class="nav-item"><a href="#" class="nav-link">Edit Recipe</a></li>
-                <li class="nav-item"><a href="#" class="nav-link">Delete Recipe</a></li>
+        <div class="btn-group " appDropdown>
+            <button class="btn btn-primary dropdown-toggle dropdown-toggle"  data-toggle="dropdown">Manage recipe</button>
+            <ul class="dropdown-menu" >
+                <li class="nav-item"><a class="nav-link dropdown-item" (click)="onAddIngredients()" role="button">To Shopping List</a></li>
+                <li class="nav-item"><a class="nav-link dropdown-item" (click)="onEditRecipe()">Edit Recipe</a></li>
+                <li class="nav-item"><a class="nav-link dropdown-item" (click)="onDeleteRecipe()" role="button">Delete Recipe</a></li>
             </ul>
         </div>
     </div>
 </div>
 <div class="row">
     <div class="col-xs-12">
-        Description
+        {{recipeSelected.description}}
     </div>
 </div>
 <div class="row">
     <div class="col-xs-12">
-        Ingredients
+        <ul class="list-group">
+            <li class="list-group-item" *ngFor="let ingredient of recipeSelected.ingredients">
+                {{ingredient.name}} - {{ingredient.amount}}
+            </li>
+        </ul>
     </div>
 </div>
