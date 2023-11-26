@@ -19,11 +19,11 @@ export class AuthService{
     expirationTimer : any;
     constructor(private http : HttpClient, private router: Router){}
 
-    SIGN_UP_URL: 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDVIh_JrIh9USmG7vMvWyTz16T4wu9A4Rk';
-    SIGN_IN_URL: 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDVIh_JrIh9USmG7vMvWyTz16T4wu9A4Rk';
+    SIGN_UP_URL: 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=xxx';
+    SIGN_IN_URL: 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=xxx';
     
     singIn(email: string, password: string){
-        return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDVIh_JrIh9USmG7vMvWyTz16T4wu9A4Rk',{
+        return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=xxx',{
             email: email, 
             password: password,
             returnSecureToken: true
@@ -34,7 +34,7 @@ export class AuthService{
     }
 
     singUp(email: string, password: string){
-        return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDVIh_JrIh9USmG7vMvWyTz16T4wu9A4Rk',{
+        return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=xxx',{
             email: email, 
             password: password,
             returnSecureToken: true
